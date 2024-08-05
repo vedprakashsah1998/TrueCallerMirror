@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TrueCallerMirror</string>
+    <string name="recive_call">Recive Call</string>
 </resources>
