@@ -22,15 +22,15 @@ pagingRuntimeKtx = "3.3.1"
 retrofitVersion = "2.9.0"
 navigationFragmentKtx = "2.7.7"
 workRuntimeKtx = "2.9.0"
-room= "2.6.1"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntimeKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofitVersion" }
-room-ktx = {module="androidx.room:room-ktx",version.ref = "room"}
-room-compiler = {module="androidx.room:room-compiler",version.ref = "room"}
-room-runtime = {module = "androidx.room:room-runtime",version.ref = "room"}
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -59,6 +59,6 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 hiltApp = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
-navigationSafeArgs = {id ="androidx.navigation.safeargs.kotlin",version.ref="navigationFragmentKtx"}
+navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationFragmentKtx" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-devToolKsp = {id = "com.google.devtools.ksp",version.ref  = "kspVersion"}
+devToolKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }

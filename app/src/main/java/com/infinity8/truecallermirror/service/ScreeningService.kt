@@ -1,4 +1,4 @@
-package com.infinity8.truecallermirror.receiver
+package com.infinity8.truecallermirror.service
 
 import android.telecom.Call
 import android.telecom.CallScreeningService

@@ -10,6 +10,7 @@
 package com.infinity8.truecallermirror.uitls
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,8 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -24,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -46,6 +50,34 @@ fun Number.formatDecimal(): String {
     return df.format(this)
 }
 
+inline fun <reified T : RecyclerView.Adapter<*>> RecyclerView.setUpAdapter(
+    adapter: T? = null
+) {
+    setItemViewCacheSize(20)
+    setHasFixedSize(true)
+    this.adapter = adapter
+}
+
+fun ImageView.setImageViewDrawable(@DrawableRes id: Int, context: Context) {
+    this.setImageDrawable(
+        ContextCompat.getDrawable(
+            context, id
+        )
+    )
+}
+
+@SuppressLint("DefaultLocale")
+fun formatDuration(seconds: Int): String {
+    val hours = seconds / 3600
+    val minutes = (seconds % 3600) / 60
+    val remainingSeconds = seconds % 60
+
+    return buildString {
+        if (hours > 0) append(String.format("%02d:", hours))
+        append(String.format("%02d:", minutes))
+        append(String.format("%02d", remainingSeconds))
+    }
+}
 
 /**
  * this extension function is used to start activity
@@ -102,14 +134,13 @@ inline fun <T> LifecycleOwner.flowWithLifecycleUI(
     }
 }
 
-inline fun <reified T, R> Outcome<T>.mapOutcome(transform: (T) -> R) =
-    when (this) {
-        is Outcome.Success -> Outcome.Success(transform(data))
-        is Outcome.Failure -> Outcome.Failure(error)
-        is Outcome.Progress -> Outcome.Progress(true)
-        is Outcome.Unknown -> Outcome.Unknown(message)
+inline fun <reified T, R> Outcome<T>.mapOutcome(transform: (T) -> R) = when (this) {
+    is Outcome.Success -> Outcome.Success(transform(data))
+    is Outcome.Failure -> Outcome.Failure(error)
+    is Outcome.Progress -> Outcome.Progress(true)
+    is Outcome.Unknown -> Outcome.Unknown(message)
 
-    }
+}
 
 /**
  * this extension function is used to load imageView using glide library
@@ -122,43 +153,35 @@ fun ImageView.loadImageWithGlide(
     onLoading: () -> Unit,
 ) {
     onLoading()
-    Glide.with(context)
-        .load(url).listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean,
-            ): Boolean {
-                onFailure()
-                return false
-            }
+    Glide.with(context).load(url).listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<Drawable>?,
+            isFirstResource: Boolean,
+        ): Boolean {
+            onFailure()
+            return false
+        }
 
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean,
-            ): Boolean {
-                onSuccess()
-                return false
-            }
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: Target<Drawable>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean,
+        ): Boolean {
+            onSuccess()
+            return false
+        }
 
-        })
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
-        .placeholder(R.mipmap.ic_launcher)
-        .error(R.mipmap.ic_launcher)
-        .into(this)
+    }).diskCacheStrategy(DiskCacheStrategy.DATA).placeholder(R.mipmap.ic_launcher)
+        .error(R.mipmap.ic_launcher).into(this)
 }
 
 fun ImageView.loadImage(url: Any) {
-    Glide.with(context).load(url)
-        .placeholder(R.mipmap.ic_launcher)
-        .transform(CircleCrop())
-        .override(100, 100)
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
-        .into(this)
+    Glide.with(context).load(url).placeholder(R.mipmap.ic_launcher).transform(CircleCrop())
+        .override(100, 100).diskCacheStrategy(DiskCacheStrategy.DATA).into(this)
 }
 
 fun ImageView.loadImageNormal(url: Any) {
@@ -184,15 +207,11 @@ fun Fragment.showToast(message: String) {
  * this method is used show snackBar
  */
 fun View.showSnackBar(e: Throwable) = Snackbar.make(
-    this,
-    e.message.toString(),
-    Snackbar.LENGTH_LONG
+    this, e.message.toString(), Snackbar.LENGTH_LONG
 ).show()
 
 fun View.showSnackBar(message: String) = Snackbar.make(
-    this,
-    message,
-    Snackbar.LENGTH_LONG
+    this, message, Snackbar.LENGTH_LONG
 ).show()
 
 fun View.snackBarError(message: String?) = Snackbar.make(this, message.toString(), 2000).apply {

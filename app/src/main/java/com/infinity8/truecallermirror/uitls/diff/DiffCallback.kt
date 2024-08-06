@@ -7,7 +7,7 @@
  *
  */
 
-package com.infinity8.mvvm_clean_base.utils.diff
+package com.infinity8.truecallermirror.uitls.diff
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil

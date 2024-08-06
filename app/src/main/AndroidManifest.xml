@@ -37,16 +37,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.CallerActivity"/>
+        <activity
+            android:name=".ui.CallerActivity"
+            android:exported="true"
+            android:theme="@style/TransparentActivityTheme" />
+
         <receiver
-            android:name=".receiver.PhoneCallReceiver"
+            android:name=".service.PhoneCallReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+        <service android:name=".service.FloatingWindowService"
+            android:permission="android.permission.SYSTEM_ALERT_WINDOW"
+            android:exported="false" />
         <service
-            android:name=".receiver.ScreeningService"
+            android:name=".service.MyInCallService"
+            android:exported="true"
+            android:permission="android.permission.BIND_INCALL_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.InCallService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".service.ScreeningService"
             android:exported="true"
             android:permission="android.permission.BIND_SCREENING_SERVICE">
             <intent-filter>

@@ -20,6 +20,16 @@ interface CallDao {
     @Query("SELECT * FROM CALLLOGENTRY")
     fun getAllCallLogs(): Flow<List<CallLogEntry>>
 
+
+    @Query("SELECT * FROM CALLLOGENTRY ORDER BY id ASC LIMIT :limit OFFSET :offset")
+    suspend fun getCallLogs(limit: Int, offset: Int): List<CallLogEntry>
+
+    @Query("SELECT * FROM CALLLOGENTRY WHERE type = 'Missed' ORDER BY id ASC LIMIT :limit OFFSET :offset")
+    suspend fun getMissedCallLogs(limit: Int, offset: Int): List<CallLogEntry>
+
+    @Query("SELECT * FROM CALLLOGENTRY WHERE type = 'Outgoing' ORDER BY id ASC LIMIT :limit OFFSET :offset")
+    suspend fun getOutGoingCallLogs(limit: Int, offset: Int): List<CallLogEntry>
+
     @Query("DELETE FROM CALLLOGENTRY WHERE id = :id")
     suspend fun deleteCallLogById(id: Int)
 

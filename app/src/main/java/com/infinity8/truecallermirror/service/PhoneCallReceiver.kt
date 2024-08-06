@@ -1,4 +1,4 @@
-package com.infinity8.truecallermirror.receiver
+package com.infinity8.truecallermirror.service
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -18,7 +18,11 @@ class PhoneCallReceiver: BroadcastReceiver() {
                     val permissionIntent = Intent(context, CallerActivity::class.java)
                     permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context?.startActivity(permissionIntent)
-                    Log.d("PhoneCallReceiver", "Incoming call from: $incomingNumber")
+                   /* val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                    val serviceIntent = Intent(context, FloatingWindowService::class.java)
+                    serviceIntent.putExtra("incoming_number", incomingNumber)
+                    context?.startService(serviceIntent)*/
+//                    Log.d("PhoneCallReceiver", "Incoming call from: $incomingNumber")
                 }
                 TelephonyManager.EXTRA_STATE_OFFHOOK -> {
                     Log.d("PhoneCallReceiver", "Call picked up")

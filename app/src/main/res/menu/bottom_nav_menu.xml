@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/allCallFragment"
+        android:icon="@drawable/all"
+        android:title="All" />
+    <item
+        android:id="@+id/missedCallFragment"
+        android:icon="@drawable/call_missed_24"
+        android:title="Missed Call" />
+    <item
+        android:id="@+id/outgoingFragment"
+        android:icon="@drawable/outgoing_24"
+        android:title="Outgoing Call" />
+    <item
+        android:id="@+id/contactFragment"
+        android:icon="@drawable/contacts_24"
+        android:title="Contacts" />
+</menu>

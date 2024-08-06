@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_view"
+    app:startDestination="@id/allCallFragment">
+
+    <fragment
+        android:id="@+id/allCallFragment"
+        android:name="com.infinity8.truecallermirror.ui.fragment.AllCallFragment"
+        android:label="All"
+        tools:layout="@layout/fragment_all_call" />
+    <fragment
+        android:id="@+id/missedCallFragment"
+        android:name="com.infinity8.truecallermirror.ui.fragment.MissedCallFragment"
+        android:label="Missed Call"
+        tools:layout="@layout/fragment_missed_call" />
+    <fragment
+        android:id="@+id/outgoingFragment"
+        android:name="com.infinity8.truecallermirror.ui.fragment.OutgoingFragment"
+        android:label="Outgoing Call"
+        tools:layout="@layout/fragment_outgoing" />
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="com.infinity8.truecallermirror.ui.fragment.ContactFragment"
+        android:label="Contacts"
+        tools:layout="@layout/fragment_contact" />
+
+</navigation>
