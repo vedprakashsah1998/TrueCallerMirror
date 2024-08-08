@@ -23,6 +23,7 @@ import com.infinity8.truecallermirror.ui.fragment.NoteBottomSheetDialogFragment
 import com.infinity8.truecallermirror.uitls.formatDuration
 import com.infinity8.truecallermirror.viewmodel.CallLogViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -121,6 +122,10 @@ class CallerActivity : AppCompatActivity() {
             latestCallLogEntry
         }
 
+        resultUiOperation(result)
+    }
+
+    private fun resultUiOperation(result: Deferred<CallLogEntry?>) {
         lifecycleScope.launch {
             val mainData = result.await()
             mainData?.let {
@@ -132,7 +137,8 @@ class CallerActivity : AppCompatActivity() {
                     durationTxt.text = formatDuration(it.duration.toInt())
                 }
                 binding.addNote.setOnClickListener {
-                    val bottomSheetFragment = NoteBottomSheetDialogFragment(mainData.id, mainData.number)
+                    val bottomSheetFragment =
+                        NoteBottomSheetDialogFragment(mainData.id, mainData.number)
                     bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
                 }
                 binding.alarmIv.setOnClickListener {
