@@ -5,18 +5,13 @@ import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 @Keep
 @Parcelize
 @Entity
-data class CallLogEntry(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    val number: String,
+data class Contacts(
+    @PrimaryKey
+    val id: String,
     val name: String,
-    val type: String,
-    val date: Date,
-    val duration: String,
-    val note: String? = ""
+    val number: String
 ) : Parcelable

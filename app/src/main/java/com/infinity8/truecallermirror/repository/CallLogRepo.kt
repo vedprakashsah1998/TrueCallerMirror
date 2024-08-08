@@ -18,8 +18,8 @@ class CallLogRepo @Inject constructor(private val callDao: CallDao) {
     suspend fun insertCallLog(callLog: CallLogEntry) = callDao.insertCallLog(callLog)
     suspend fun insertCallLog(callLog: List<CallLogEntry>) = callDao.insertCallLog(callLog)
 
-     fun getAllCallLog(): Flow<List<CallLogEntry>> {
-        return flow{emitAll(callDao.getAllCallLogs())}
+    fun getAllCallLog(): Flow<List<CallLogEntry>> {
+        return flow { emitAll(callDao.getAllCallLogs()) }
     }
 
     fun getAllCallLogs(): Flow<PagingData<CallLogEntry>> {
@@ -61,5 +61,6 @@ class CallLogRepo @Inject constructor(private val callDao: CallDao) {
         ).flow
     }
 
+    suspend fun updateNote(id: Long, note: String) = callDao.updateNoteById(id, note)
     suspend fun deleteCallLog(callLog: CallLogEntry) = callDao.deleteCallLog(callLog)
 }

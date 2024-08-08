@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.infinity8.truecallermirror.appDb
 import com.infinity8.truecallermirror.dao.CallDao
+import com.infinity8.truecallermirror.dao.ContactDao
 import com.infinity8.truecallermirror.database.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -17,13 +18,18 @@ import javax.inject.Singleton
 object DatabaseModule {
 
     @Provides
-    fun provideChannelDao(appDatabase: AppDatabase): CallDao = appDatabase.callListDao()
+    fun provideCallLogDao(appDatabase: AppDatabase): CallDao = appDatabase.callListDao()
+
+    @Provides
+    fun provideContactsDao(appDatabase: AppDatabase): ContactDao = appDatabase.contactList()
 
 
     @Singleton
     @Provides
     fun provideMyDB(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context,
+        Room.databaseBuilder(
+            context,
             AppDatabase::class.java,
-            appDb).fallbackToDestructiveMigration().allowMainThreadQueries().build()
+            appDb
+        ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
 }

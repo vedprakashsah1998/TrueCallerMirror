@@ -53,6 +53,8 @@ class CallLogViewModel @Inject constructor(
         insertCallLogs()
         getCallLogs()
         getPaginatedCallLogs()
+        getPaginatedOutgoingCallLogs()
+        getPaginatedMissedCallLogs()
     }
 
     private fun getCallLogs() {
@@ -89,6 +91,26 @@ class CallLogViewModel @Inject constructor(
                 callLogRepo.getMissedCallLogs()
                     .cachedIn(viewModelScope)
                     .distinctUntilChanged()
+                    .onStart { _callLogMissedFlow.value = Outcome.Progress(true) }
+                    .onCompletion { _callLogMissedFlow.value = Outcome.Progress(false) }
+                    .catch { e ->
+                        _callLogMissedFlow.value = Outcome.Failure(e)
+                    }
+                    .collectLatest { pagingData ->
+                        _callLogMissedFlow.value = Outcome.Success(pagingData)
+                    }
+            } catch (e: Exception) {
+                _callLogMissedFlow.value = Outcome.Failure(e)
+            }
+        }
+    }
+
+    private fun getPaginatedOutgoingCallLogs() {
+        viewModelScope.launch {
+            try {
+                callLogRepo.getOutgoingCallLogs()
+                    .cachedIn(viewModelScope)
+                    .distinctUntilChanged()
                     .onStart { _callLogOutgoingFlow.value = Outcome.Progress(true) }
                     .onCompletion { _callLogOutgoingFlow.value = Outcome.Progress(false) }
                     .catch { e ->
@@ -102,25 +124,11 @@ class CallLogViewModel @Inject constructor(
             }
         }
     }
-
-    private fun getPaginatedOutgoingCallLogs() {
+    fun updateNote(id: Long, note: String) {
         viewModelScope.launch {
-            try {
-                callLogRepo.getOutgoingCallLogs()
-                    .cachedIn(viewModelScope)
-                    .distinctUntilChanged()
-                    .onStart { _callLogMissedFlow.value = Outcome.Progress(true) }
-                    .onCompletion { _callLogMissedFlow.value = Outcome.Progress(false) }
-                    .catch { e ->
-                        _callLogMissedFlow.value = Outcome.Failure(e)
-                    }
-                    .collectLatest { pagingData ->
-                        _callLogMissedFlow.value = Outcome.Success(pagingData)
-                    }
-            } catch (e: Exception) {
-                _callLogMissedFlow.value = Outcome.Failure(e)
-            }
+            callLogRepo.updateNote(id, note)
         }
+
     }
 
     private fun insertCallLogs() {

@@ -1,60 +1,84 @@
 package com.infinity8.truecallermirror.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.infinity8.truecallermirror.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import com.infinity8.truecallermirror.controller.ApiPaginatedListCallback
+import com.infinity8.truecallermirror.controller.UICallback
+import com.infinity8.truecallermirror.databinding.FragmentMissedCallBinding
+import com.infinity8.truecallermirror.model.CallLogEntry
+import com.infinity8.truecallermirror.ui.BaseFragment
+import com.infinity8.truecallermirror.ui.adapter.AllCallAdapter
+import com.infinity8.truecallermirror.ui.adapter.MainLoadStateAdapter
+import com.infinity8.truecallermirror.uitls.flowWithLifecycleUI
+import com.infinity8.truecallermirror.uitls.handlePaginatedCallback
+import com.infinity8.truecallermirror.uitls.setUpAdapter
+import com.infinity8.truecallermirror.uitls.showErrorSnackBar
+import com.infinity8.truecallermirror.viewmodel.CallLogViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MissedCallFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MissedCallFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class MissedCallFragment :
+    BaseFragment<FragmentMissedCallBinding>(FragmentMissedCallBinding::inflate),
+    UICallback, ApiPaginatedListCallback<CallLogEntry> {
+    private val callViewModel: CallLogViewModel by activityViewModels()
+    private val callPageAdapter: AllCallAdapter by lazy {
+        AllCallAdapter(
+            requireContext(),
+            this@MissedCallFragment
+        )
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.rvMissedCall.setUpAdapter(callPageAdapter.withLoadStateFooter(footer = MainLoadStateAdapter()))
+
+        fetchCallLogs()
+    }
+
+    override fun recyclerviewItemClick(callLogEntry: CallLogEntry) {
+
+    }
+
+    private fun fetchCallLogs() {
+        loadProductIntoList()
+        flowWithLifecycleUI(callViewModel.callMissedLogs, Lifecycle.State.CREATED) { data ->
+            data.handlePaginatedCallback(this@MissedCallFragment, this@MissedCallFragment)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_missed_call, container, false)
+    private fun loadProductIntoList() = callPageAdapter.addLoadStateListener { loadState ->
+        when (val currentState = loadState.refresh) {
+            is LoadState.Loading -> {
+                binding.progress.visibility = View.VISIBLE
+            }
+
+            is LoadState.Error -> {
+                val extractedException = currentState.error
+                showErrorSnackBar(extractedException.message.toString())
+                binding.progress.visibility = View.GONE
+            }
+
+            is LoadState.NotLoading -> {
+                binding.progress.visibility = View.GONE
+            }
+        }
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MissedCallFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MissedCallFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun successPaging(list: PagingData<CallLogEntry>) {
+        callPageAdapter.submitData(viewLifecycleOwner.lifecycle, list)
     }
+
+    override fun <T> loading(result: T) {
+        val loadRes = result as Boolean
+        if (loadRes) {
+            binding.progress.visibility = View.VISIBLE
+        } else {
+            binding.progress.visibility = View.GONE
+        }
+    }
+
 }

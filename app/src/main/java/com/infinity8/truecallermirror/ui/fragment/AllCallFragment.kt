@@ -29,7 +29,7 @@ class AllCallFragment : BaseFragment<FragmentAllCallBinding>(FragmentAllCallBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvCurated.setUpAdapter(callPageAdapter.withLoadStateFooter(footer = MainLoadStateAdapter()))
+        binding.rvAllCall.setUpAdapter(callPageAdapter.withLoadStateFooter(footer = MainLoadStateAdapter()))
 
         fetchCallLogs()
 

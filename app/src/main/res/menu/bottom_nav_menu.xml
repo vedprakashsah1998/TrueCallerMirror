@@ -12,8 +12,8 @@
         android:id="@+id/outgoingFragment"
         android:icon="@drawable/outgoing_24"
         android:title="Outgoing Call" />
-    <item
+<!--    <item
         android:id="@+id/contactFragment"
         android:icon="@drawable/contacts_24"
-        android:title="Contacts" />
+        android:title="Contacts" />-->
 </menu>

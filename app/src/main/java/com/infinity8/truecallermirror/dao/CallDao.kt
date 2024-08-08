@@ -35,4 +35,7 @@ interface CallDao {
 
     @Delete
     suspend fun deleteCallLog(callLogEntry: CallLogEntry)
+
+    @Query("UPDATE CALLLOGENTRY SET note = :note WHERE id = :id")
+    suspend fun updateNoteById(id: Long, note: String)
 }

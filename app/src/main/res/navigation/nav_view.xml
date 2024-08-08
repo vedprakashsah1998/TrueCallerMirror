@@ -20,10 +20,10 @@
         android:name="com.infinity8.truecallermirror.ui.fragment.OutgoingFragment"
         android:label="Outgoing Call"
         tools:layout="@layout/fragment_outgoing" />
-    <fragment
+  <!--  <fragment
         android:id="@+id/contactFragment"
         android:name="com.infinity8.truecallermirror.ui.fragment.ContactFragment"
         android:label="Contacts"
-        tools:layout="@layout/fragment_contact" />
+        tools:layout="@layout/fragment_contact" />-->
 
 </navigation>
