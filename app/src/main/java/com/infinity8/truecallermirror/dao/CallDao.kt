@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Upsert
 import com.infinity8.truecallermirror.model.CallLogEntry
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface CallDao {
@@ -38,4 +39,10 @@ interface CallDao {
 
     @Query("UPDATE CALLLOGENTRY SET note = :note WHERE id = :id")
     suspend fun updateNoteById(id: Long, note: String)
+
+    @Query("SELECT COUNT(*) FROM CALLLOGENTRY WHERE date = :date")
+    fun doesCallLogExist(date: Date): Boolean
+
+    @Query("SELECT MAX(id) FROM CALLLOGENTRY")
+    fun getLastId(): Long
 }

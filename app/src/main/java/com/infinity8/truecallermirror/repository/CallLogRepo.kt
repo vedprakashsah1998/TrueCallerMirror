@@ -11,6 +11,7 @@ import com.infinity8.truecallermirror.model.CallLogEntry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import java.util.Date
 import javax.inject.Inject
 
 class CallLogRepo @Inject constructor(private val callDao: CallDao) {
@@ -61,6 +62,14 @@ class CallLogRepo @Inject constructor(private val callDao: CallDao) {
         ).flow
     }
 
-    suspend fun updateNote(id: Long, note: String) = callDao.updateNoteById(id, note)
+    suspend fun updateNote(id: Long, note: String) = callDao.updateNoteById(1, note)
+    fun doesCallLogExist(date: Date): Boolean {
+        return callDao.doesCallLogExist(date)
+    }
+    fun getLastInsertedId(): Long {
+        // Implement logic to retrieve the last inserted ID
+        return callDao.getLastId() // Assuming you have a DAO method to get this
+    }
+
     suspend fun deleteCallLog(callLog: CallLogEntry) = callDao.deleteCallLog(callLog)
 }

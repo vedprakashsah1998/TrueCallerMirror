@@ -26,9 +26,8 @@ class NoteBottomSheetDialogFragment(val id: Long, val number: String) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding?.addNoteBtn?.setOnClickListener {
-            callViewModel.updateNote(id, number)
+            callViewModel.updateNote(id, _binding?.textInputEditText?.text.toString())
             dismiss()
         }
 

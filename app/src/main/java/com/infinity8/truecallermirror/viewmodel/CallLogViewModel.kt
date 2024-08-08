@@ -13,6 +13,7 @@ import com.infinity8.truecallermirror.repository.CallLogRepo
 import com.infinity8.truecallermirror.uitls.Outcome
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -124,6 +125,7 @@ class CallLogViewModel @Inject constructor(
             }
         }
     }
+
     fun updateNote(id: Long, note: String) {
         viewModelScope.launch {
             callLogRepo.updateNote(id, note)
@@ -131,8 +133,9 @@ class CallLogViewModel @Inject constructor(
 
     }
 
+
     private fun insertCallLogs() {
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO){
             var count = 0L
             val projection = arrayOf(
                 CallLog.Calls.NUMBER,
@@ -168,23 +171,32 @@ class CallLogViewModel @Inject constructor(
 
                     // Add call log entry to list
                     val contactName = getContactName(number) ?: "Unknown"
-                    count++
-                    callLogRepo.insertCallLog(
-                        CallLogEntry(
-                            count,
-                            number,
-                            contactName,
-                            type,
-                            date,
-                            duration
+                    if (!callLogRepo.doesCallLogExist(date)) {
+                        count++
+                        callLogRepo.insertCallLog(
+                            CallLogEntry(
+                                count,
+                                number,
+                                contactName,
+                                type,
+                                date,
+                                duration
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
     }
 
-    // Function to get contact name from phone number
+    fun insertCallLog(callLog: CallLogEntry?) {
+        viewModelScope.launch (Dispatchers.IO){
+            if (callLog != null) {
+                callLogRepo.insertCallLog(callLog)
+            }
+        }
+    }
+
     private fun getContactName(phoneNumber: String): String? {
         val uri = Uri.withAppendedPath(
             ContactsContract.PhoneLookup.CONTENT_FILTER_URI,

@@ -10,6 +10,7 @@ import android.provider.ContactsContract
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,6 +21,7 @@ import com.infinity8.truecallermirror.databinding.ActivityCallerBinding
 import com.infinity8.truecallermirror.model.CallLogEntry
 import com.infinity8.truecallermirror.ui.fragment.NoteBottomSheetDialogFragment
 import com.infinity8.truecallermirror.uitls.formatDuration
+import com.infinity8.truecallermirror.viewmodel.CallLogViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -31,6 +33,7 @@ import java.util.Date
 class CallerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCallerBinding
     val list: MutableList<CallLogEntry> = mutableListOf()
+    private val callViewModel: CallLogViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +117,7 @@ class CallerActivity : AppCompatActivity() {
                     latestCallLogEntry = CallLogEntry(0, number, contactName, type, date, duration)
                 }
             }
+            callViewModel.insertCallLog(latestCallLogEntry)
             latestCallLogEntry
         }
 
