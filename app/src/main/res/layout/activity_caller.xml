@@ -17,13 +17,15 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintTop_toTopOf="parent">
+
         <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_gravity="center"
-            android:id="@+id/progress"
+            android:layout_gravity="center"
             android:indeterminateTint="@color/color_red"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,11 +33,11 @@
             android:padding="16dp">
 
             <ImageView
+                android:id="@+id/close_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/close_button"
                 android:layout_gravity="end"
-                android:src="@drawable/baseline_close_24"/>
+                android:src="@drawable/baseline_close_24" />
 
             <TextView
                 android:id="@+id/caller_name"
@@ -53,77 +55,24 @@
                 android:text="Contact No"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/call_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
-<!--
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="3"
-                android:layout_marginTop="12dp"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:src="@drawable/duration"/>
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/durationTxt"
-                        android:padding="4dp"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:id="@+id/alarmIv"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/alarm_24"/>
-                    <TextView
-                        android:layout_margin="4dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/alarmTxt"/>
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:id="@+id/addNote"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/notes_24"/>
-
-            </LinearLayout>
--->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/iconContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintEnd_toStartOf="@id/time"
-                app:layout_constraintTop_toBottomOf="@id/number"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginHorizontal="8dp">
+                app:layout_constraintEnd_toStartOf="@id/time"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/number">
 
                 <!-- Duration Icon -->
                 <ImageView
@@ -133,9 +82,9 @@
                     android:layout_marginEnd="4dp"
                     android:padding="4dp"
                     android:src="@drawable/duration"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:tint="@color/white" />
 
                 <!-- Duration Text -->
@@ -143,12 +92,12 @@
                     android:id="@+id/durationTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:gravity="center_vertical"
                     android:layout_marginStart="4dp"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/durationIcon"
                     app:layout_constraintStart_toEndOf="@id/durationIcon"
-                    app:layout_constraintTop_toTopOf="@+id/durationIcon"
-                    app:layout_constraintBottom_toBottomOf="@+id/durationIcon"/>
+                    app:layout_constraintTop_toTopOf="@+id/durationIcon" />
 
                 <!-- Notes Icon -->
                 <ImageView
@@ -156,11 +105,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:src="@drawable/notes_24"
-                    app:tint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/durationIcon"
+                    app:layout_constraintEnd_toStartOf="@id/alarmIv"
                     app:layout_constraintStart_toEndOf="@id/durationTxt"
                     app:layout_constraintTop_toTopOf="@+id/durationIcon"
-                    app:layout_constraintBottom_toBottomOf="@+id/durationIcon"
-                    app:layout_constraintEnd_toStartOf="@id/alarmIv"/>
+                    app:tint="@color/white" />
 
                 <!-- Alarm Icon -->
                 <ImageView
@@ -170,19 +119,20 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/alarm_24"
-                    app:tint="@color/color_green_light"
-                    app:layout_constraintTop_toTopOf="@+id/durationIcon"
                     app:layout_constraintBottom_toBottomOf="@+id/durationIcon"
-                    app:layout_constraintEnd_toStartOf="@+id/alarmTxt"/>
+                    app:layout_constraintEnd_toStartOf="@+id/alarmTxt"
+                    app:layout_constraintTop_toTopOf="@+id/durationIcon"
+                    app:tint="@color/color_green_light" />
+
                 <TextView
-                    android:layout_margin="4dp"
-                    android:layout_gravity="center_vertical"
+                    android:id="@+id/alarmTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/alarmIv"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
                     app:layout_constraintBottom_toBottomOf="@+id/alarmIv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:id="@+id/alarmTxt"/>
+                    app:layout_constraintTop_toTopOf="@+id/alarmIv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

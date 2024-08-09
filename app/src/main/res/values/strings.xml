@@ -3,4 +3,6 @@
     <string name="recive_call">Receive Call</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_note">Add Note</string>
+    <string name="add_a_note">Add a note</string>
 </resources>

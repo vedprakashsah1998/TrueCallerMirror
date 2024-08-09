@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -21,12 +22,14 @@ import requestMultiplePermission
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate), Callbacks {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         arrayOf(
             android.Manifest.permission.READ_CALL_LOG,
             android.Manifest.permission.READ_CONTACTS,
             android.Manifest.permission.READ_PHONE_STATE,
-            android.Manifest.permission.ANSWER_PHONE_CALLS
+            android.Manifest.permission.ANSWER_PHONE_CALLS,
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
     } else {
         arrayOf(
@@ -87,6 +90,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         })
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestPermissions() {
         if (isPermissionGranted(permissions)) {
             // Permissions are already granted

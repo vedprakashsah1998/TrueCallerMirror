@@ -72,7 +72,8 @@ fun FragmentActivity.requestMultiplePermission(
     registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsResult ->
         if (permissionsResult[android.Manifest.permission.READ_CALL_LOG] == true && permissionsResult[android.Manifest.permission.READ_CONTACTS] == true &&
             permissionsResult[android.Manifest.permission.READ_PHONE_STATE] == true &&
-            permissionsResult[android.Manifest.permission.ANSWER_PHONE_CALLS] == true
+            permissionsResult[android.Manifest.permission.ANSWER_PHONE_CALLS] == true&&
+            permissionsResult[android.Manifest.permission.POST_NOTIFICATIONS] == true
         ) {
             allowedPermission()
         } else {
