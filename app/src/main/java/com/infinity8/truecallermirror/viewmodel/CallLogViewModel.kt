@@ -32,10 +32,6 @@ class CallLogViewModel @Inject constructor(
     @ApplicationContext val context: Context
 ) : ViewModel() {
 
-    private val _callLogFlow: MutableStateFlow<Outcome<List<CallLogEntry>>> =
-        MutableStateFlow(Outcome.Progress(true))
-    val callLogs: StateFlow<Outcome<List<CallLogEntry>>> = _callLogFlow
-
     private val _callLogListFlow: MutableStateFlow<Outcome<PagingData<CallLogEntry>>> =
         MutableStateFlow(Outcome.Progress(true))
     val callListLogs: StateFlow<Outcome<PagingData<CallLogEntry>>> = _callLogListFlow
@@ -51,20 +47,17 @@ class CallLogViewModel @Inject constructor(
 
 
     init {
-        insertCallLogs()
-        getCallLogs()
+        viewModelScope.launch {
+            insertCallLogs()
+            observeDataChanges()
+        }
+    }
+    private fun observeDataChanges() {
         getPaginatedCallLogs()
         getPaginatedOutgoingCallLogs()
         getPaginatedMissedCallLogs()
     }
 
-    private fun getCallLogs() {
-        viewModelScope.launch {
-            callLogRepo.getAllCallLog().collectLatest { log ->
-                _callLogFlow.value = Outcome.Success(log)
-            }
-        }
-    }
 
     private fun getPaginatedCallLogs() {
         viewModelScope.launch {
@@ -136,6 +129,7 @@ class CallLogViewModel @Inject constructor(
 
     private fun insertCallLogs() {
         viewModelScope.launch (Dispatchers.IO){
+            val callLogEntries = mutableListOf<CallLogEntry>()
             var count = 0L
             val projection = arrayOf(
                 CallLog.Calls.NUMBER,
@@ -173,7 +167,7 @@ class CallLogViewModel @Inject constructor(
                     val contactName = getContactName(number) ?: "Unknown"
                     if (!callLogRepo.doesCallLogExist(date)) {
                         count++
-                        callLogRepo.insertCallLog(
+                        callLogEntries.add(
                             CallLogEntry(
                                 count,
                                 number,
@@ -183,7 +177,14 @@ class CallLogViewModel @Inject constructor(
                                 duration
                             )
                         )
+                        if (callLogEntries.size % 100 == 0) {
+                            callLogRepo.insertCallLog(callLogEntries)
+                            callLogEntries.clear()
+                        }
                     }
+                }
+                if (callLogEntries.isNotEmpty()) {
+                    callLogRepo.insertCallLog(callLogEntries)
                 }
             }
         }

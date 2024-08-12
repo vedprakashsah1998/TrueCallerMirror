@@ -1,6 +1,7 @@
 package com.infinity8.truecallermirror.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -25,26 +26,29 @@ class AllCallFragment : BaseFragment<FragmentAllCallBinding>(FragmentAllCallBind
     ApiPaginatedListCallback<CallLogEntry>, UICallback {
 
     private val callViewModel: CallLogViewModel by activityViewModels()
-    private val callPageAdapter: AllCallAdapter by lazy { AllCallAdapter(requireContext(),this@AllCallFragment) }
+    private val callPageAdapter: AllCallAdapter by lazy {
+        AllCallAdapter(
+            requireContext(),
+            this@AllCallFragment
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvAllCall.setUpAdapter(callPageAdapter.withLoadStateFooter(footer = MainLoadStateAdapter()))
 
         fetchCallLogs()
-
+        loadProductIntoList()
     }
 
     override fun recyclerviewItemClick(callLogEntry: CallLogEntry) {
 
     }
 
-    private fun fetchCallLogs() {
-        loadProductIntoList()
+    private fun fetchCallLogs() =
         flowWithLifecycleUI(callViewModel.callListLogs, Lifecycle.State.CREATED) { data ->
             data.handlePaginatedCallback(this@AllCallFragment, this@AllCallFragment)
         }
-    }
 
     private fun loadProductIntoList() = callPageAdapter.addLoadStateListener { loadState ->
         when (val currentState = loadState.refresh) {
@@ -60,13 +64,22 @@ class AllCallFragment : BaseFragment<FragmentAllCallBinding>(FragmentAllCallBind
 
             is LoadState.NotLoading -> {
                 binding.progress.visibility = View.GONE
+                Log.d("fwoiueroiu: ", "fwoiuero: ${callPageAdapter.snapshot().items.size}")
             }
         }
+        /*    Log.d("fowiueroi: ","foiwueroi: ${loadState.refresh is LoadState.NotLoading}")
+            if (callPageAdapter.itemCount == 0 &&  loadState.refresh is LoadState.NotLoading) {
+                binding.progress.visibility = View.VISIBLE
+            } else {
+                binding.progress.visibility = View.GONE
+            }*/
 
     }
 
     override fun successPaging(list: PagingData<CallLogEntry>) {
-        callPageAdapter.submitData(viewLifecycleOwner.lifecycle, list)
+        if (view != null) {
+            callPageAdapter.submitData(viewLifecycleOwner.lifecycle, list)
+        }
     }
 
     override fun <T> loading(result: T) {

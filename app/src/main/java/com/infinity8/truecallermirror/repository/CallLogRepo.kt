@@ -2,7 +2,6 @@ package com.infinity8.truecallermirror.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.infinity8.truecallermirror.dao.CallDao
 import com.infinity8.truecallermirror.datasource.CallLogPagingSource
 import com.infinity8.truecallermirror.datasource.MissedCallLogSource
@@ -23,49 +22,41 @@ class CallLogRepo @Inject constructor(private val callDao: CallDao) {
         return flow { emitAll(callDao.getAllCallLogs()) }
     }
 
-    fun getAllCallLogs(): Flow<PagingData<CallLogEntry>> {
-        return Pager(
-            config = PagingConfig(
-                initialLoadSize = 20,
-                jumpThreshold = 20,
-                prefetchDistance = 20,
-                pageSize = 20,  // Number of items per page
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { CallLogPagingSource(callDao) }
-        ).flow
-    }
+    fun getAllCallLogs() = Pager(
+        config = PagingConfig(
+            initialLoadSize = 20,
+            jumpThreshold = 20,
+            prefetchDistance = 20,
+            pageSize = 20,  // Number of items per page
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { CallLogPagingSource(callDao) }
+    ).flow
 
-    fun getMissedCallLogs(): Flow<PagingData<CallLogEntry>> {
-        return Pager(
-            config = PagingConfig(
-                initialLoadSize = 20,
-                jumpThreshold = 20,
-                prefetchDistance = 20,
-                pageSize = 20,  // Number of items per page
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { MissedCallLogSource(callDao) }
-        ).flow
-    }
+    fun getMissedCallLogs() = Pager(
+        config = PagingConfig(
+            initialLoadSize = 20,
+            jumpThreshold = 20,
+            prefetchDistance = 20,
+            pageSize = 20,  // Number of items per page
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { MissedCallLogSource(callDao) }
+    ).flow
 
-    fun getOutgoingCallLogs(): Flow<PagingData<CallLogEntry>> {
-        return Pager(
-            config = PagingConfig(
-                initialLoadSize = 20,
-                jumpThreshold = 20,
-                prefetchDistance = 20,
-                pageSize = 20,  // Number of items per page
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { OutgoingCallPagingSource(callDao) }
-        ).flow
-    }
+    fun getOutgoingCallLogs() = Pager(
+        config = PagingConfig(
+            initialLoadSize = 20,
+            jumpThreshold = 20,
+            prefetchDistance = 20,
+            pageSize = 20,  // Number of items per page
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { OutgoingCallPagingSource(callDao) }
+    ).flow
 
     suspend fun updateNote(id: Long, note: String) = callDao.updateNoteById(1, note)
-    fun doesCallLogExist(date: Date): Boolean {
-        return callDao.doesCallLogExist(date)
-    }
+    fun doesCallLogExist(date: Date) = callDao.doesCallLogExist(date)
     fun getLastInsertedId(): Long {
         // Implement logic to retrieve the last inserted ID
         return callDao.getLastId() // Assuming you have a DAO method to get this
