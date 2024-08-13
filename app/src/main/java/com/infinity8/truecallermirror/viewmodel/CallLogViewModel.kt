@@ -180,6 +180,7 @@ class CallLogViewModel @Inject constructor(
                         if (callLogEntries.size % 100 == 0) {
                             callLogRepo.insertCallLog(callLogEntries)
                             callLogEntries.clear()
+                            observeDataChanges()
                         }
                     }
                 }
